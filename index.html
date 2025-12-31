@@ -2,70 +2,89 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy New Year 2026 ✨</title>
+<title> 🎉 Wish you Very Happy New Year 2026 🎉 💜 Pritha 💜 </title>
 
 <style>
 html, body {
     margin: 0;
     padding: 0;
-    background: radial-gradient(circle at bottom, #020111, #000000);
-    overflow: hidden;
     height: 100%;
+    overflow: hidden;
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 
+/* Violet sky */
+body {
+    background: linear-gradient(to top, #d6c6ff, #f3e9ff);
+}
+
+/* Canvas */
 canvas {
     position: fixed;
     top: 0;
     left: 0;
 }
 
-/* Main glowing wish */
+/* Mountains */
+.mountains {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, #6b5b95, #8e7cc3);
+    clip-path: polygon(
+        0% 100%, 
+        0% 60%, 
+        15% 45%, 
+        30% 60%, 
+        45% 40%, 
+        60% 65%, 
+        75% 50%, 
+        90% 65%, 
+        100% 55%, 
+        100% 100%
+    );
+    z-index: 2;
+}
+
+/* Main text */
 h1 {
     position: absolute;
     width: 100%;
-    top: 38%;
+    top: 30%;
     text-align: center;
-    font-size: 3.5rem;
-    color: #ffd700;
-    z-index: 10;
+    font-size: 3.2rem;
+    color: #4b0082;
+    z-index: 5;
     animation: glow 2s infinite alternate;
 }
 
 @keyframes glow {
     from {
-        text-shadow: 0 0 10px #ffd700, 0 0 20px #ffae00;
+        text-shadow: 0 0 8px #b19cd9;
     }
     to {
-        text-shadow: 0 0 25px #ffd700, 0 0 60px #ff8c00;
+        text-shadow: 0 0 25px #9370db;
     }
-}
-
-/* Sub sparkle text */
-#subText {
-    position: absolute;
-    width: 100%;
-    top: 52%;
-    text-align: center;
-    color: #ffffffcc;
-    font-size: 1.2rem;
-    z-index: 10;
 }
 
 /* Tap message */
 #tapMsg {
     position: absolute;
-    bottom: 10%;
+    bottom: 12%;
     width: 100%;
     text-align: center;
-    color: #ffffffaa;
+    color: #4b0082;
     font-size: 1rem;
-    z-index: 10;
+    z-index: 6;
+    opacity: 0.8;
 }
 
 /* Mobile */
 @media (max-width: 600px) {
-    h1 { font-size: 2.3rem; }
+    h1 {
+        font-size: 2.2rem;
+    }
 }
 </style>
 </head>
@@ -74,9 +93,10 @@ h1 {
 
 <canvas id="canvas"></canvas>
 
-<h1>✨ Wish You a Happy New Year 2026, Pritha ✨</h1>
-<div id="subText">May your year sparkle with joy, success & beautiful moments ✨</div>
+<h1>💜 🎉Wish you very happy New Year🎉, Pritha 💜</h1>
 <div id="tapMsg">🎵 Tap anywhere to enable music</div>
+
+<div class="mountains"></div>
 
 <!-- Music -->
 <audio id="bgMusic" loop>
@@ -94,73 +114,62 @@ function resize() {
 resize();
 window.addEventListener("resize", resize);
 
-/* ⭐ Star Particle */
-class Star {
+/* 🎉✨ Emoji Particle */
+class EmojiParticle {
     constructor(x, y, burst = false) {
         this.x = x;
         this.y = y;
+        this.emoji = Math.random() > 0.5 ? "🎉" : "✨";
         this.angle = Math.random() * Math.PI * 2;
-        this.speed = burst ? Math.random() * 8 + 4 : Math.random() * 2 + 0.5;
-        this.life = burst ? 140 : 300;
-        this.size = Math.random() * 2 + 1;
-        this.alpha = 1;
+        this.speed = burst ? Math.random() * 6 + 3 : Math.random() * 1.5 + 0.3;
+        this.life = burst ? 120 : 300;
+        this.size = burst ? 26 : 18;
     }
 
     draw() {
-        const vx = Math.cos(this.angle) * this.speed;
-        const vy = Math.sin(this.angle) * this.speed;
-
-        this.x += vx;
-        this.y += vy;
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
         this.life--;
-        this.alpha = this.life / 300;
 
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x + this.size, this.y + this.size * 2);
-        ctx.lineTo(this.x - this.size, this.y + this.size * 2);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
+        ctx.font = `${this.size}px serif`;
+        ctx.fillText(this.emoji, this.x, this.y);
     }
 }
 
-let stars = [];
+let particles = [];
 
-/* Gentle continuous star scatter */
+/* Grand blast on page load (email click moment) */
+function grandEmojiBlast() {
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+
+    for (let i = 0; i < 180; i++) {
+        particles.push(new EmojiParticle(cx, cy, true));
+    }
+}
+
+/* Gentle floating sparkles */
 function softScatter() {
-    stars.push(new Star(
-        Math.random() * canvas.width,
-        Math.random() * canvas.height / 2
-    ));
+    particles.push(
+        new EmojiParticle(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height / 2
+        )
+    );
 }
 
-/* 🎉 GRAND STAR BLAST on page load */
-function grandStarBlast() {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-
-    for (let i = 0; i < 300; i++) {
-        stars.push(new Star(centerX, centerY, true));
-    }
-}
-
-/* Animation loop */
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    stars.forEach((s, i) => {
-        s.draw();
-        if (s.life <= 0) stars.splice(i, 1);
+    particles.forEach((p, i) => {
+        p.draw();
+        if (p.life <= 0) particles.splice(i, 1);
     });
     requestAnimationFrame(animate);
 }
 
-/* Start effects */
-grandStarBlast();               // 🎉 Email click blast
-setInterval(softScatter, 120);  // ✨ Elegant star flow
+/* Start animations */
+grandEmojiBlast();
+setInterval(softScatter, 150);
 animate();
 
 /* Music on first tap */
