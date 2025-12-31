@@ -114,12 +114,12 @@ function resize() {
 resize();
 window.addEventListener("resize", resize);
 
-/* 🎉✨ Emoji Particle */
+/* 💜🤍 Emoji Particle */
 class EmojiParticle {
     constructor(x, y, burst = false) {
         this.x = x;
         this.y = y;
-        this.emoji = Math.random() > 0.5 ? "🎉" : "✨";
+        this.emoji = Math.random() > 0.5 ? "🤍" : "💜";
         this.angle = Math.random() * Math.PI * 2;
         this.speed = burst ? Math.random() * 6 + 3 : Math.random() * 1.5 + 0.3;
         this.life = burst ? 120 : 300;
